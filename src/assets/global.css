@@ -1,0 +1,38 @@
+.global-user-input{
+    width: 300px;
+    height: 35px;
+    font-size: 15px;
+    font-weight: 200;
+    color: #fbfbf8;
+    background-color: transparent;
+    border-bottom: solid 1px #fbfbf8;
+}
+.global-user-input:focus{
+    border-bottom: solid 1px #f6b73f;
+
+}
+.global-user-btn{
+    width: 300px;
+    height: 38px;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-top: 40px;
+    box-shadow: 0 0 100px 1px rgba(255, 255, 255, 0.3);
+    position: relative;
+}
+.gm-scrollbar.-vertical {
+    background-color: transparent !important;
+}
+/* horizontal scrollbar track */
+.gm-scrollbar.-horizontal {
+    background-color: transparent !important;
+}
+/* scrollbar thumb */
+.gm-scrollbar .thumb {
+    background-color: #b3b3b3 !important;
+
+}
+.gm-scrollbar .thumb:hover {
+    background-color: #f6b73f !important;
+}
+

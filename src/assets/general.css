@@ -1,0 +1,26 @@
+body,div,p,ul,ol,li,input{margin: 0;padding: 0}
+ul,li,ol{
+    list-style-type: none;
+}
+input{
+    outline: none;
+    border: none;
+}
+button{
+    display: block;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    cursor: pointer;
+}
+canvas{display: block}
+a{
+    color: inherit;
+    text-decoration: none;
+}
+a:link{
+    color: inherit;
+}
+a:hover{
+    text-decoration: underline;
+}
