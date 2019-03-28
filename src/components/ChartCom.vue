@@ -13,7 +13,7 @@
             paramWidth: '',
             paramHeight: '',
             echartOption:null,
-            resizeChart:Boolean
+            resizeChart: Boolean
         },
         data: function () {
             return {
@@ -60,14 +60,13 @@
 
                 //!ID重复问题！
                 let chartDom = document.getElementById(this.randomId.toString());
-
-                let chart = this.$echarts.init(chartDom);
+                let chart = this.$echarts.init(chartDom, 'Cat');
                 chart.clear();
                 chart.setOption(echartOption);
                 this.chart = chart;
             },
             resize:function(){
-
+                console.log('resize！')
                 this.chart.resize();
             }
         },
@@ -82,9 +81,8 @@
 
         },
         mounted:function(){
-
+            console.log(this.echartOption);
             if(this.echartOption !== null){
-
                 this.draw(this.echartOption);
             }
         }

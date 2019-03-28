@@ -8,6 +8,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 //echarts
 import echarts from 'echarts';
+import theme from './assets/customed.project';
 
 Vue.config.productionTip = false;
 
@@ -66,7 +67,13 @@ Vue.prototype.globalData = {
     }
 };
 Vue.prototype.$axios = $axios;
+echarts.registerTheme('Cat', theme.theme);
 Vue.prototype.$echarts = echarts;
+
+
+
+
+
 let vm = new Vue({
   router,
   render: h => h(App)

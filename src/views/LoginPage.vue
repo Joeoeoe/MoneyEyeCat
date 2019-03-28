@@ -1,18 +1,28 @@
 <template>
     <div class="container">
 
-        <form class="login-form" >
-            <p class="login-font" :class="usernameStatus === 1? '':'wrong-color'">{{usernameTip}}</p>
-            <input class="global-user-input" v-model="inputUsername"/>
-            <p class="login-font" :class="passwordStatus === 1? '':'wrong-color'">{{passwordTip}}</p>
-            <input class="global-user-input" type="password" v-model="inputPassword"/>
-            <p class="login-font forget-password">忘记密码？</p>
-            <button class="global-user-btn login-btn" type="button" @click="loginFunction">
-                <loading-com background="#fff" v-show="isLoading"></loading-com>
-                <span v-show="!isLoading">登录</span>
-            </button>
-            <p class="login-font-ask">还没有账号？<span class="login-font">注册</span></p>
-        </form>
+
+
+        <div>
+            <div class="logo">
+
+            </div>
+            <p class="slogan">—— 财务报表在线可视化工具</p>
+            <button>开始使用</button>
+        </div>
+
+        <!--<form class="login-form" >-->
+            <!--<p class="login-font" :class="usernameStatus === 1? '':'wrong-color'">{{usernameTip}}</p>-->
+            <!--<input class="global-user-input" v-model="inputUsername"/>-->
+            <!--<p class="login-font" :class="passwordStatus === 1? '':'wrong-color'">{{passwordTip}}</p>-->
+            <!--<input class="global-user-input" type="password" v-model="inputPassword"/>-->
+            <!--<p class="login-font forget-password">忘记密码？</p>-->
+            <!--<button class="global-user-btn login-btn" type="button" @click="loginFunction">-->
+                <!--<loading-com background="#fff" v-show="isLoading"></loading-com>-->
+                <!--<span v-show="!isLoading">登录</span>-->
+            <!--</button>-->
+            <!--<p class="login-font-ask">还没有账号？<span class="login-font">注册</span></p>-->
+        <!--</form>-->
         <div class="coin coin1" :class="animationStatus === 1? 'coin1-animation':''" @animationend="nextAnimation"></div>
         <div class="coin coin2" :class="animationStatus === 2? 'coin2-animation':''" @animationend="nextAnimation"></div>
         <div class="coin coin3" :class="animationStatus === 3? 'coin3-animation':''" @animationend="nextAnimation"></div>
@@ -45,6 +55,7 @@
                 if(!this.isLoading && reg.test(this.inputUsername)){
                     if(reg.test(this.inputPassword)){
                         this.isLoading = true; //登陆中
+
                         this.$axios.post('/login_view/',{
                             username: this.inputUsername,
                             password: this.inputPassword
@@ -54,6 +65,9 @@
                         }).catch((error) =>{
 
                         })
+
+
+
                     }else{
                         this.passwordStatus = 0;
                         this.passwordTip = '请输入6-15位密码，匹配字母数字_'

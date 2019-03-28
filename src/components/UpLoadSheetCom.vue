@@ -58,7 +58,7 @@
 </template>
 
 <script>
-    import XLSL from 'xlsx'
+    import XLSX from 'xlsx'
 
     export default {
         name: "up-load-sheet-com",
@@ -181,7 +181,7 @@
                     reader.onload = (e) => {
                         let data = e.target.result;
                         !rABS && (data = new Uint8Array(data));
-                        let workbook = XLSL.read(data, {type: rABS ? 'binary' : 'array'});
+                        let workbook = XLSX.read(data, {type: rABS ? 'binary' : 'array'});
                         this.workbook = workbook;
                         console.log(workbook);
                         this.getSheetNames(workbook);
@@ -236,7 +236,7 @@
                     reader.onload = (e) => {
                         let data = e.target.result;
                         !rABS && (data = new Uint8Array(data));
-                        let workbook = XLSL.read(data, {type: rABS ? 'binary' : 'array'});
+                        let workbook = XLSX.read(data, {type: rABS ? 'binary' : 'array'});
                         this.getSheetNames(workbook);
                         let sheetsArrayLength = this.paramSheetsArray.length,
                             ALSheetName = '资产负债',//用于匹配

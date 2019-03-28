@@ -11,7 +11,7 @@
     "@tweenjs/tween.js": "^17.2.0",
     "axios": "^0.18.0",
     "echarts": "^4.1.0",
-    "element-ui": "^2.4.11",
+    "element-ui": "^2.6.3",
     "vue": "^2.5.21",
     "vue-gemini-scrollbar": "^2.0.0",
     "vue-router": "^3.0.1",
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-service": "^3.3.0",
+    "@vue/cli-service": "^3.5.2",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",

@@ -2,11 +2,9 @@
     <div class="menu-com">
         <!--导航-->
         <button class="menu-btn" :class="menuBtnToggle===true? 'menu-btn-on':'' " @click="controlMenu">
-            <span>流动资产</span>
+            <span>{{title}}</span>
             <span :class="menuBtnToggle===true? 'triangle-down':'triangle-right'"></span>
         </button>
-
-
 
         <!--放置科目-->
         <div class="subjects-container" v-show="menuBtnToggle" @click="getChoices">
@@ -23,13 +21,15 @@
     export default {
         name: "menu-com",
         props: {
-            paramChoicesArray: Array
+            paramChoicesArray: Array,
+            title:String
         },
         data: function () {
             return {
-                menuBtnToggle: true,
+                menuBtnToggle: false,
                 choicesArray: this.paramChoicesArray,
                 selectedMap:new Map()
+
                 // choicesArray: [
                 //     {
                 //         name:'货币资金',
@@ -46,6 +46,11 @@
                 // ]
             }
         },
+        watch:{
+            paramChoicesArray:function(newVal, oldVal){
+                this.choicesArray = newVal;
+            }
+        },
         methods: {
             controlMenu: function () {
                 this.menuBtnToggle = !this.menuBtnToggle;
@@ -59,6 +64,10 @@
                     this.$emit('get-subject',subject);
                 }
             }
+        },
+        mounted:function(){
+            console.log(111);
+            console.log(this.paramChoicesArray);
         }
     }
 </script>

@@ -17,7 +17,7 @@
             <!--用户栏-->
             <up-bar-com></up-bar-com>
             <!--主要内容-->
-            <chart-container-com :sheet-data="paramDataSets"></chart-container-com>
+            <chart-container-com :home-page-side="leftStyleObj.flag" :sheet-data="paramDataSets"></chart-container-com>
         </div>
 
         <!--右侧栏-->
@@ -82,7 +82,8 @@
                 //ui控制
                 leftStyleObj: {
                     width: 16.5,
-                    display: 'block'
+                    display: 'block',
+                    flag:true
                 },
                 isShowUpLoad: false,
 
@@ -106,7 +107,10 @@
                 }
                 tween.start();
                 animate();
-
+                //异步处理....
+                setTimeout(()=>{
+                    this.leftStyleObj.flag = !this.leftStyleObj.flag;
+                },100)
 
             },
             showUpLoad: function () {
@@ -131,7 +135,6 @@
                     };
                     this.paramDataSets = paramSheet;
                 }
-
             },
             judgeTablesGroup: function (index) {
                 if (index === -1) {
@@ -166,6 +169,7 @@
                     sheetTime:CFSheet.sheetTime,
                     charts: []
                 });
+
                 console.log(globalData);
 
                 //    数据获得，通过paraSheetsArray传给sidebar组件

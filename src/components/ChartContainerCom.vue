@@ -14,33 +14,46 @@
                 </div>
             </div>
         </div>
-        <div class="chart-container"  :style="{height: chartContainerHeight + 'px'}">
+        <div class="chart-container" :style="{height: chartContainerHeight + 'px'}" @click="checkChart">
 
             <!--charts图-->
-            <chart-com class="chart" :resize-chart="resizeChart" v-for="chart in chartArray" param-width="40%" param-height="60%" :echart-option="chart"></chart-com>
+            <div v-for="(chart, index) in chartArray" class="chart">
+                <button class="check-btn" :data-btn-index="index">放大</button>
+                <chart-com :resize-chart="resizeChart" param-width="100%" param-height="100%" :echart-option="chart">
+                </chart-com>
+            </div>
+
             <!--占位div-->
             <div class="occupy-div"></div>
         </div>
+
         <!--生成图表组件-->
-        <create-chart-com v-if="isShowCreateChart" v-on:show-create-chart="showCreateChart" :sheet-data="sheetData"></create-chart-com>
+        <create-chart-com v-if="isShowCreateChart" v-on:show-create-chart="showCreateChart"
+                          :sheet-data="sheetData"></create-chart-com>
+
+        <check-chart-com v-if="isShowCheckChart" :echart-option="echartOption" v-on:show-check-chart="showCheckChart"></check-chart-com>
     </div>
+
 </template>
 
 <script>
     import CreateChartCom from './CreateChartCom'
     import ChartCom from './ChartCom'
+    import CheckChartCom from './CheckChartCom'
+
     export default {
         name: "chart-container-com",
-        components:{
+        components: {
             CreateChartCom: CreateChartCom,
-            ChartCom:ChartCom
+            ChartCom: ChartCom,
+            CheckChartCom: CheckChartCom
         },
         props: {
             //通过$emit改变父组件数据,从而改变子组件
             sheetData: {
-                title:'', //名字
-                type:'',//方案类型 group:选择组，table:选择表
-                group:''
+                title: '', //名字
+                type: '',//方案类型 group:选择组，table:选择表
+                group: ''
                 //选择一张表的情况
                 // title:,
                 // dataSets:{},
@@ -60,6 +73,7 @@
                 // ]
                 // charts:[]
             },
+            homePageSide: Boolean
             // tableTitle:{
             //     type:String,
             //     required:true,
@@ -67,33 +81,59 @@
             // }
 
         },
-        watch:{
-            sheetData:function(newSheetData, oldSheetData){
+        watch: {
+            sheetData: function (newSheetData, oldSheetData) {
                 let charts = null;
-                if(newSheetData.type === 'group'){
-                     charts = this.globalData.sheetsData[newSheetData.group]
-                }else{
-                     let data = this.globalData.sheetsData[newSheetData.group].get(newSheetData.title);
-                     charts = data.charts;
+                if (newSheetData.type === 'group') {
+                    charts = this.globalData.sheetsData[newSheetData.group]
+                } else {
+                    let data = this.globalData.sheetsData[newSheetData.group].get(newSheetData.title);
+                    charts = data.charts;
                 }
 
                 this.chartArray = charts;
+            },
+            homePageSide: function () {
+                this.resizeChart = !this.resizeChart;
             }
         },
         data: function () {
             return {
-                chartArray:[],
-                isShowCreateChart:false,
+                chartArray: [],
+                isShowCreateChart: false,
                 // charts:this.sheetData.charts,
                 chartContainerHeight: 550,
-                resizeChart:false
+                resizeChart: false,
+                canvasDom: null,
+                echartOption: null,
+                isShowCheckChart: false
             }
         },
-        methods:{
-            showCreateChart:function(){
-                this.isShowCreateChart = !this.isShowCreateChart;
+        methods: {
+            checkChart: function (e) {
+                let index = e.target.getAttribute('data-btn-index');
+                let chartOption = null;
+                if (index !== null && index !== undefined) {
+                    let chartIndex = parseInt(index);
+                    console.log(this.globalData.sheetsData[this.sheetData.group]);
+                    if(this.sheetData.type === 'table'){
+                        chartOption = this.globalData.sheetsData[this.sheetData.group].get(this.sheetData.title).charts[chartIndex];
+                    }else{
+                        chartOption = this.globalData.sheetsData[this.sheetData.group][chartIndex];
+                    }
+                    this.echartOption = chartOption;
+                    this.showCheckChart();
+                }
             },
+            showCreateChart: function () {
+                this.isShowCreateChart = !this.isShowCreateChart;
+
+            },
+            showCheckChart:function(){
+                this.isShowCheckChart = !this.isShowCheckChart;
+            }
         },
+
         created: function () {
 
             this.chartContainerHeight = window.innerHeight - 190;
@@ -173,12 +213,23 @@
     }
 
     .chart {
-        margin-right: 3%;
-        margin-bottom: 30px;
-        border: 1px solid #e9e6ed;
-    }
-    .occupy-div{
         width: 40%;
         height: 60%;
+        margin-right: 3%;
+        margin-bottom: 30px;
+        position: relative;
+        border: 1px solid #e9e6ed;
+    }
+
+    .occupy-div {
+        width: 43%;
+        height: 60%;
+    }
+
+    .check-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 998;
     }
 </style>

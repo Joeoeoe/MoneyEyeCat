@@ -61,8 +61,9 @@
         margin: 0 10px 10px 0;
     }
     .option-btn{
-        width: 40px;
-        height: 25px;
-        font-size: 10px;
+        min-width: 60px;
+        min-height: 32px;
+        font-size: 16px;
+        margin: 0 10px;
     }
 </style>
