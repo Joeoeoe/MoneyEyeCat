@@ -30,7 +30,7 @@
                         <menu-com class="menu-com"
                                   v-on:get-subject="getData"
                                   :param-choices-array="subjectArray"
-                                  title="科目">
+                                  title="可选科目">
                         </menu-com>
                     </div>
                     <!--表格容器-->

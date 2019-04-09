@@ -15,6 +15,7 @@ export default new Router({
           name:'test',
           component: test
         },
+
         {
             path:'/HomePage',
             name:'HomePage',
@@ -25,6 +26,7 @@ export default new Router({
             name: 'LoginPage',
             component: LoginPage
         },
+
         {
             path: '/home',
             name: 'home',

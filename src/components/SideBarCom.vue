@@ -177,7 +177,7 @@
                 CFToggle: true,
 
                 //ui控制
-                lastGroup:null, //ALGroup,ALArray,PFGroup,PFArray,CFGroup,CFArray
+                lastGroup:"ALGroup", //ALGroup,ALArray,PFGroup,PFArray,CFGroup,CFArray
                 lastIndex:null, //-1表示Group，0，1，2...则表示下标
                 sideBarOpacity: true,//true表示不透明
                 toggleObj: {

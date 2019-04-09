@@ -3,12 +3,13 @@
 
 
 
-        <div>
-            <div class="logo">
-
-            </div>
+        <div class="enter-container">
+            <div class="logo"></div>
             <p class="slogan">—— 财务报表在线可视化工具</p>
-            <button>开始使用</button>
+            <router-link  to="/HomePage" >
+                <button class="enter-button">开始使用</button>
+            </router-link>
+
         </div>
 
         <!--<form class="login-form" >-->
@@ -50,6 +51,9 @@
             }
         },
         methods: {
+            enter:function(){
+
+            },
             loginFunction: function () {
                 let reg = /^\w{6,15}$/;
                 if(!this.isLoading && reg.test(this.inputUsername)){
@@ -96,6 +100,36 @@
         background-image: url("../assets/pages/LoginPage/login-background.png");
         background-size: 100% 100%;
         background-repeat: no-repeat;
+        display: flex;
+        justify-content: center;
+    }
+    .enter-container{
+        margin-top: 14%;
+    }
+    .logo{
+        width: 356px;
+        height: 107px;
+        background-image: url("../assets/logo.png");
+        background-size: 70%;
+        background-repeat: no-repeat;
+        background-position: center center;
+        margin: 0 auto;
+    }
+    .slogan{
+        font-size: 18px;
+        color: #fbfbf8;
+        text-align: center;
+        margin-top: 8px;
+    }
+    .enter-button{
+        width: 400px;
+        height: 60px;
+        background-color: #f6b73f;
+        border-radius: 16px;
+        font-size: 22px;
+        letter-spacing: 5px;
+        color: #fbfbf8;
+        margin: 50px auto  0 auto;
     }
 
     .login-form {

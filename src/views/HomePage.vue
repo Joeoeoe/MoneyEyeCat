@@ -75,9 +75,9 @@
                     CFArray: []
                 },
                 paramDataSets: {
-                    title:'',
-                    type:'', //group:选择组,table:选择表
-                    group:'' //定位globalData中的数据
+                    title:'资产负债表汇总',
+                    type:'group', //group:选择组,table:选择表
+                    group:'ALGroup' //定位globalData中的数据
                 },
                 //ui控制
                 leftStyleObj: {

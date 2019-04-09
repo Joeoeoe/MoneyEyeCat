@@ -304,6 +304,7 @@
                 this.PFDataTable = dataTable;
                 this.recordPFPosArray1 = recordPosArray1;
                 this.recordPFPosArray2 = recordPosArray2;
+                console.log(dataTable);
 
                 /**
                  * 表数据已获得，开始解析获得数据集，用初，末位置进行定位
