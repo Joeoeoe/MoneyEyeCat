@@ -71,10 +71,10 @@
                  **/
                 workbook: null, //解析之后的excel表格
                 paramSheetsArray: [],//记录有什么表
-                sheetTime:"",//表时间，点击完成后加于表名前
+                sheetTime: "",//表时间，点击完成后加于表名前
                 //AL
                 ALSheetName: null,
-                customALSheetName:'',//用户自定义表名
+                customALSheetName: '',//用户自定义表名
                 ALDataTable: [],  //二维数组，每一个元素为一个数组，储存每列内容
                 recordALPosArray1: [], //记录资产负债表'初'或'末'单元格位置，元素数据结构：{target:单元格位置，column:字母列，row：数字行}，下同
                 recordALPosArray2: [],  //对应记录资产负债表'末'或 '初'单元格位置
@@ -85,7 +85,7 @@
 
                 //PF
                 PFSheetName: null,
-                customPFSheetName:'',
+                customPFSheetName: '',
                 PFDataTable: [],
                 recordPFPosArray1: [],
                 recordPFPosArray2: [],
@@ -96,7 +96,7 @@
 
                 //CF
                 CFSheetName: null,
-                customCFSheetName:'',
+                customCFSheetName: '',
                 CFDataTable: [],
                 recordCFPosArray1: [],
                 recordCFPosArray2: [],
@@ -106,7 +106,7 @@
                 CFTime: [null, null],
 
                 //    UI控制
-                step:1 //1：上传文件 2：填写时间字段
+                step: 1 //1：上传文件 2：填写时间字段
             }
         },
         methods: {
@@ -127,6 +127,8 @@
                 let [ALTime1, ALTime2] = this.ALTime,
                     [PFTime1, PFTime2] = this.PFTime,
                     [CFTime1, CFTime2] = this.CFTime;
+
+
                 //获取资产负债表数据集
                 try {
                     this.parseALSheet(workbook, ALSheetName, ALTime1, ALTime2);
@@ -153,28 +155,36 @@
                     dataSets: this.ALDataSets,
                     timeField1: ALTime1,
                     timeField2: ALTime2,
-                    sheetTime:this.sheetTime
+                    sheetTime: this.sheetTime
                 }, {
                     name: this.sheetTime + this.customPFSheetName,
                     dataSets: this.PFDataSets,
                     timeField1: PFTime1,
                     timeField2: PFTime2,
-                    sheetTime:this.sheetTime
+                    sheetTime: this.sheetTime
                 }, {
                     name: this.sheetTime + this.customCFSheetName,
                     dataSets: this.CFDataSets,
                     timeField1: CFTime1,
                     timeField2: CFTime2,
-                    sheetTime:this.sheetTime
+                    sheetTime: this.sheetTime
                 });
                 //关闭组件
                 this.close();
             },
-            handleFiles: function (event) {
-                let rABS = false;//true:readAsBinaryString;  false:readAsArrayBuffer
-                let files = event.target.files, f = files[0];
-                let reg = /^(.*)(\.)(\w*)$/;
 
+            analysisFiles:function(event, type){ //type:upload表示上传，drop表示拖拽
+                let rABS = false;//true:readAsBinaryString;  false:readAsArrayBuffer
+                console.log(event.target.files);
+                let files = null, f = null;
+                if(type === 'upload'){
+                    files = event.target.files;
+                    f = files[0];
+                }else if(type === 'drop'){
+                    files = event.dataTransfer.files;
+                    f = files[0];
+                }
+                let reg = /^(.*)(\.)(\w*)$/;
                 let fileName = reg.exec(f.name)[3].toLowerCase();
                 if (fileName === 'xlsx' || fileName === 'xls') {
                     let reader = new FileReader();
@@ -183,7 +193,6 @@
                         !rABS && (data = new Uint8Array(data));
                         let workbook = XLSX.read(data, {type: rABS ? 'binary' : 'array'});
                         this.workbook = workbook;
-                        console.log(workbook);
                         this.getSheetNames(workbook);
                         let sheetsArrayLength = this.paramSheetsArray.length,
                             ALSheetName = '资产负债',//用于匹配
@@ -209,7 +218,41 @@
                                 continue;
                             }
                         }
+                        console.log(this.ALSheetName);
+                        console.log(this.CFSheetName);
+                        console.log(this.PFSheetName);
+                        console.log(this.workbook.Sheets);
+                        const
+                            ALSheet = this.workbook.Sheets[this.ALSheetName],
+                            CFSheet = this.workbook.Sheets[this.CFSheetName],
+                            PFSheet = this.workbook.Sheets[this.PFSheetName];
+                        console.log(ALSheet);
+                        getTimeField(ALSheet);
+                        function getTimeField(sheet) {
+                            let letterMap = new Map(),
+                                timeFied1 = null,
+                                timeField2 = null;
+                            /**
+                             * 1.获取sheet所有字母及对应最大数字和最小数字 Map:{'A' => { min: max} }
+                             * 2.遍历Map字母
+                             * 3.根据字母+min 组合遍历数据，第一个数据的上一个为时间段，填入timeField1与timeField2
+                             */
+                            for (let itemName in sheet) {
+                                const letterNumReg = /^([A-Z])(\d+)$/;
+                                console.log(itemName);
 
+                                try{//捕获排除类似'!ref'的属性
+                                    let letter = letterNumReg.exec(itemName)[1],
+                                        num = parseInt(letterNumReg.exec(itemName)[2]),
+                                        valueObj = new Object();
+                                    //判断有无字母
+                                    letterMap.has(letter) && letterMap.set(letter, {min: null, max: null});
+                                }catch(e){
+
+                                }
+                            }
+
+                        }
                     };
                     if (rABS) {
                         reader.readAsBinaryString(f);
@@ -221,58 +264,14 @@
                 }
                 this.step = 2;
             },
-            handleDrop: function (event) {
 
-                let rABS = false;
+            handleFiles: function (event) {
+                this.analysisFiles(event, 'upload');
+            },
+            handleDrop: function (event) {
                 event.stopPropagation();
                 event.preventDefault();
-                let files = event.dataTransfer.files, f = files[0];
-
-                let reg = /^(.*)(\.)(\w*)$/;
-
-                let fileName = reg.exec(f.name)[3].toLowerCase();
-                if (fileName === 'xlsx' || fileName === 'xls') {
-                    let reader = new FileReader();
-                    reader.onload = (e) => {
-                        let data = e.target.result;
-                        !rABS && (data = new Uint8Array(data));
-                        let workbook = XLSX.read(data, {type: rABS ? 'binary' : 'array'});
-                        this.getSheetNames(workbook);
-                        let sheetsArrayLength = this.paramSheetsArray.length,
-                            ALSheetName = '资产负债',//用于匹配
-                            PFSheetName = '利润',
-                            CFSheetName = '现金';
-                        //设置各个表名叫什么
-                        for (let i = 0; i < sheetsArrayLength; i++) {
-                            if (ALSheetName === '资产负债' && this.paramSheetsArray[i].indexOf(ALSheetName) !== -1) {
-                                ALSheetName = this.paramSheetsArray[i];
-                                continue;
-                            }
-                            if (PFSheetName === '利润' && this.paramSheetsArray[i].indexOf(PFSheetName) !== -1) {
-                                PFSheetName = this.paramSheetsArray[i];
-                                continue;
-                            }
-                            if (CFSheetName === '现金' && this.paramSheetsArray[i].indexOf(CFSheetName) !== -1) {
-                                CFSheetName = this.paramSheetsArray[i];
-                                continue;
-                            }
-                        }
-                        //获取资产负债表数据集
-                        this.parseALSheet(workbook, ALSheetName);
-
-                        //获取利润表数据集
-                        this.parsePFSheet(workbook, PFSheetName);
-                        //获取现金流量表数据集
-                        this.parseCFSheet(workbook, CFSheetName);
-                    };
-                    if (rABS) {
-                        reader.readAsBinaryString(f);
-                    } else {
-                        reader.readAsArrayBuffer(f);
-                    }
-                } else {
-                    alert('请上传后缀为.xlsx的excel表格');
-                }
+                this.analysisFiles(event, 'drop');
             },
             parseALSheet: function (workbook, sheetName, timeField1, timeField2) {
                 let ALData = workbook.Sheets[sheetName];
@@ -496,9 +495,11 @@
         margin: 49px 0 25px 0;
         display: flex;
     }
-    .time-field-container .div0{
+
+    .time-field-container .div0 {
         margin-left: 85px;
     }
+
     .time-field-container .div1 {
         margin-left: 160px;
     }
@@ -552,6 +553,7 @@
         background-color: #f1f2fa;
         border-radius: 8px;
     }
+
     .field-input-container .input0 {
         width: 130px;
         height: 40px;
@@ -568,19 +570,22 @@
     .field-input-container .input2 {
         margin-left: 30px;
     }
-    .field-input-container span{
+
+    .field-input-container span {
         color: #f6b73f;
         display: inline-block;
         margin-left: 25px;
         /*vertical-align: text-bottom;*/
     }
-    .field-input-container .time-tips{
+
+    .field-input-container .time-tips {
         font-size: 10px;
         color: #bfbcd3;
-        margin:5px 25px 0 0;
+        margin: 5px 25px 0 0;
         /*vertical-align: t ext-bottom;*/
     }
-    .inline-block-div{
+
+    .inline-block-div {
         /*display: inline-block;*/
     }
 
