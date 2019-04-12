@@ -132,7 +132,6 @@
                 //获取资产负债表数据集
                 try {
                     this.parseALSheet(workbook, ALSheetName, ALTime1, ALTime2);
-                    console.log()
                 } catch (e) {
                     console.log(e);
                 }
@@ -173,14 +172,14 @@
                 this.close();
             },
 
-            analysisFiles:function(event, type){ //type:upload表示上传，drop表示拖拽
+            analysisFiles: function (event, type) { //type:upload表示上传，drop表示拖拽
                 let rABS = false;//true:readAsBinaryString;  false:readAsArrayBuffer
                 console.log(event.target.files);
                 let files = null, f = null;
-                if(type === 'upload'){
+                if (type === 'upload') {
                     files = event.target.files;
                     f = files[0];
-                }else if(type === 'drop'){
+                } else if (type === 'drop') {
                     files = event.dataTransfer.files;
                     f = files[0];
                 }
@@ -218,40 +217,128 @@
                                 continue;
                             }
                         }
-                        console.log(this.ALSheetName);
-                        console.log(this.CFSheetName);
-                        console.log(this.PFSheetName);
-                        console.log(this.workbook.Sheets);
                         const
                             ALSheet = this.workbook.Sheets[this.ALSheetName],
                             CFSheet = this.workbook.Sheets[this.CFSheetName],
                             PFSheet = this.workbook.Sheets[this.PFSheetName];
-                        console.log(ALSheet);
-                        getTimeField(ALSheet);
+                        this.ALTime = getTimeField(ALSheet);
+                        this.PFTime = getTimeField(PFSheet);
+                        this.CFTime = getTimeField(CFSheet);
+
+
+
                         function getTimeField(sheet) {
                             let letterMap = new Map(),
-                                timeFied1 = null,
-                                timeField2 = null;
+                                timeField1 = null,
+                                timeField2 = null,
+                                letterArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
+
                             /**
-                             * 1.获取sheet所有字母及对应最大数字和最小数字 Map:{'A' => { min: max} }
-                             * 2.遍历Map字母
-                             * 3.根据字母+min 组合遍历数据，第一个数据的上一个为时间段，填入timeField1与timeField2
+                             * 1.获取sheet所有字母及对应最大下标和最小下标 Map:{'A' => { minIndex, maxIndex} }
+                             * 2.遍历letterMap，通过字母+下标组合遍历；超过50%为数字则代表此列为数据列；遍历时记录第一个遍历到数字的组合：例如
+                             * 3.通过第一个遍历到数字的组合获取时间段，总共两个时间段可获取，若两个时间段均不为null则结束遍历
                              */
                             for (let itemName in sheet) {
                                 const letterNumReg = /^([A-Z])(\d+)$/;
-                                console.log(itemName);
 
-                                try{//捕获排除类似'!ref'的属性
+
+                                try {//捕获排除类似'!ref'的属性
                                     let letter = letterNumReg.exec(itemName)[1],
-                                        num = parseInt(letterNumReg.exec(itemName)[2]),
-                                        valueObj = new Object();
-                                    //判断有无字母
-                                    letterMap.has(letter) && letterMap.set(letter, {min: null, max: null});
-                                }catch(e){
+                                        num = parseInt(letterNumReg.exec(itemName)[2]);
+                                    //判断Map中有无字母
+                                    !letterMap.has(letter) && letterMap.set(letter, {minIndex: num, maxIndex: num});
+                                    let indexObj = letterMap.get(letter);
+                                    num < indexObj.minIndex ? indexObj.minIndex = num : null;
+                                    num > indexObj.maxIndex ? indexObj.maxIndex = num : null;
+                                } catch (e) {
 
                                 }
                             }
+                            console.log(letterMap);
 
+                            for (let letter of letterArray) {
+                                let indexObj = letterMap.get(letter);
+                                if (indexObj !== undefined) {
+                                    const limitValueNum = 3; //最少有效数值个数限制
+                                    let numRecord = 0, //记录有多少数字
+                                        minIndex = 10;
+                                    for (let i = indexObj.minIndex; numRecord <= limitValueNum && i <= indexObj.maxIndex; i++) {//判断是否为数据列，寻找数据最小下标
+                                        let unit = letter + i.toString();
+                                        if (sheet.hasOwnProperty(unit)) {
+                                            let unitValue = sheet[unit].v;
+                                            (typeof unitValue) === 'number' && unitValue > 500 ? numRecord++ : null;// >500：排除行数误入的情况
+                                            (typeof unitValue) === 'number' && i < minIndex ? minIndex = i : null;
+                                        } else {
+                                            continue
+                                        }
+                                    }
+                                    if (numRecord > limitValueNum) { //是数据列
+                                        for (let i = minIndex; i > 0; i--) {//向上遍历寻找时间字段
+                                            try {//捕获无数据错误，排除
+                                                let unitValue = sheet[(letter + i.toString())].v,
+                                                    dataType = typeof unitValue;
+                                                if (dataType !== 'number' && unitValue !== '-') {
+                                                    if (timeField1 === null) {
+                                                        timeField1 = unitValue;
+                                                        break;
+                                                    } else if (timeField2 === null) {
+                                                        timeField2 = unitValue;
+                                                        break;
+                                                    }
+                                                }
+                                            } catch (e) {
+                                            }
+                                        }
+                                    }
+                                    if (timeField1 !== null && timeField2 !== null) {
+                                        break;
+                                    }
+                                } else {
+                                    break;
+                                }
+
+                            }
+
+                            // for (let [letter, indexObj] of letterMap) {//得按照ABCD顺序遍历
+                            //     let numRecord = 0, //记录有多少数字
+                            //         minIndex = 10;
+                            //     for (let i = indexObj.minIndex; numRecord <= 10 && i <= indexObj.maxIndex; i++) {//判断是否为数据列，寻找数据最小下标
+                            //         let unit = letter + i.toString();
+                            //         if (sheet.hasOwnProperty(unit)) {
+                            //             let unitValue = sheet[unit].v;
+                            //
+                            //             (typeof unitValue) === 'number' && unitValue > 500 ? numRecord++ : null;// >500：排除行数误入的情况
+                            //             (typeof unitValue) === 'number' && i < minIndex ? minIndex = i : null;
+                            //         } else {
+                            //             continue
+                            //         }
+                            //     }
+                            //     if(numRecord > 10){ //是数据列
+                            //         for (let i = minIndex; i > 0; i--) {//向上遍历寻找时间字段
+                            //             try{//捕获无数据错误，排除
+                            //                 let unitValue = sheet[(letter + i.toString())].v,
+                            //                     dataType = typeof unitValue;
+                            //                 if (dataType !== 'number' && unitValue !== '-') {
+                            //                     if(timeField1 === null){
+                            //                         timeField1 = unitValue;
+                            //                         break;
+                            //                     }else if(timeField2 === null){
+                            //                         timeField2 = unitValue;
+                            //                         break;
+                            //                     }
+                            //                 }
+                            //             }catch(e){
+                            //             }
+                            //         }
+                            //     }
+                            //     if(timeField1 !== null && timeField2 !== null){
+                            //         break;
+                            //     }
+                            //
+                            // }
+                            console.log(timeField1);
+                            console.log(timeField2);
+                            return [timeField1, timeField2];
                         }
                     };
                     if (rABS) {
@@ -289,7 +376,8 @@
                 /**
                  * 表数据已获得，开始解析获得数据集，用初，末位置进行定位
                  **/
-                this.ALDataSets = this.getDataSets(recordPosArray1, recordPosArray2, dataTable, columnsLength, rowsLength)
+                this.ALDataSets = this.getDataSets(recordPosArray1, recordPosArray2, dataTable, columnsLength, rowsLength);
+                console.log(this.ALDataSets);
             },
             parsePFSheet: function (workbook, sheetName, timeField1, timeField2) {
                 let PFData = workbook.Sheets[sheetName];

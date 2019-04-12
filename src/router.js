@@ -1,21 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import test from './views/test'
+
 import LoginPage from './views/LoginPage'
 import HomePage from './views/HomePage'
 Vue.use(Router);
 
 export default new Router({
-    mode: 'history',
+    mode: 'hash',
     base: process.env.BASE_URL,
     routes: [
+        // {
+        //   path:'/test',
+        //   name:'test',
+        //   component: test
+        // },
         {
-          path:'/test',
-          name:'test',
-          component: test
+            path:'/',
+            redirect:'/LoginPage'
         },
-
         {
             path:'/HomePage',
             name:'HomePage',

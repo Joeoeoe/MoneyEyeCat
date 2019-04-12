@@ -6,7 +6,7 @@
         <div class="enter-container">
             <div class="logo"></div>
             <p class="slogan">—— 财务报表在线可视化工具</p>
-            <router-link  to="/HomePage" >
+            <router-link  class="route" to="/HomePage" >
                 <button class="enter-button">开始使用</button>
             </router-link>
 
@@ -120,6 +120,9 @@
         color: #fbfbf8;
         text-align: center;
         margin-top: 8px;
+    }
+    .route{
+        text-decoration: none;
     }
     .enter-button{
         width: 400px;

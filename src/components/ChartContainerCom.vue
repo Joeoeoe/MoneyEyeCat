@@ -231,5 +231,8 @@
         right: 0;
         top: 0;
         z-index: 998;
+        background-color: #a1c9f9;
+        color: #ffff;
+        border-radius: 1px;
     }
 </style>
