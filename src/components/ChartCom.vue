@@ -66,7 +66,7 @@
                 this.chart = chart;
             },
             resize:function(){
-                console.log('resize！')
+                // console.log('resize！')
                 this.chart.resize();
             }
         },
@@ -81,7 +81,7 @@
 
         },
         mounted:function(){
-            console.log(this.echartOption);
+            // console.log(this.echartOption);
             if(this.echartOption !== null){
                 this.draw(this.echartOption);
             }

@@ -19,7 +19,7 @@
         },
         methods: {
             closeCheckChartCom: function (e) {
-                console.log(e.target.tagName);
+                // console.log(e.target.tagName);
                 if (e.target.tagName !== 'CANVAS') {
                     this.$emit('show-check-chart');
                 }
@@ -27,7 +27,7 @@
             }
         },
         mounted: function () {
-            console.log(this.echartOption);
+            // console.log(this.echartOption);
         }
     }
 </script>

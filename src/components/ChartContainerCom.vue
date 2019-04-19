@@ -115,7 +115,7 @@
                 let chartOption = null;
                 if (index !== null && index !== undefined) {
                     let chartIndex = parseInt(index);
-                    console.log(this.globalData.sheetsData[this.sheetData.group]);
+                    // console.log(this.globalData.sheetsData[this.sheetData.group]);
                     if(this.sheetData.type === 'table'){
                         chartOption = this.globalData.sheetsData[this.sheetData.group].get(this.sheetData.title).charts[chartIndex];
                     }else{

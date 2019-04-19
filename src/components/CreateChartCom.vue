@@ -132,7 +132,7 @@
                             this.subjectMap.set(key, value)
                         }
                     }
-                    console.log(this.subjectMap);
+                    // console.log(this.subjectMap);
                     this.createEchartOption(this.chartOption, this.subjectMap, timeField1, timeField2);
                 } else if (this.sheetData.type === 'group') {
                     //重写sheetArray！！！！！
@@ -142,7 +142,7 @@
                         } else {
                             this.subjectMap.set(subject, [null, null, null, subject]);
                         }
-                        console.log(this.subjectMap);
+                        // console.log(this.subjectMap);
                         // //考虑长度1变0的情况
                         this.echartOption = new Object();
                         return;
@@ -185,7 +185,7 @@
                         break;
                 }
 
-                console.log(tempEchartOption);
+                // console.log(tempEchartOption);
                 this.echartOption = tempEchartOption;
 
                 function createBarOption(subjectMap, timeField1, timeField2) {
@@ -352,7 +352,7 @@
                 }
 
                 function createRadarOption(subjectMap, timeField1, timeField2){
-                    console.log(subjectMap);
+                    // console.log(subjectMap);
                     let radarOption = {};
                     let dataMap = new Map();//格式  2002年初: Map ; 2002年末:Map
                     let maxNum = -1;  //从subjectMap中获取最大值给雷达图
@@ -374,7 +374,7 @@
                     let radar = {},
                         legendData = [],
                         series = [];
-                    console.log(maxNum);
+                    // console.log(maxNum);
                     radar.indicator = [];
                     for(let [key, value] of subjectMap){
                         radar.indicator.push({
@@ -428,7 +428,7 @@
                         },
                         series: series
                     };
-                    console.log(radarOption);
+                    // console.log(radarOption);
                     return radarOption;
                 }
 
@@ -452,8 +452,8 @@
                     for(let [yearKey, value] of tempYearMap){
                         yData.push(yearKey);
                     }
-                    console.log(tempSubjectMap);
-                    console.log(tempYearMap);
+                    // console.log(tempSubjectMap);
+                    // console.log(tempYearMap);
                     for(let [key, valueMap] of tempSubjectMap){
                         series.push({
                             name:key,
@@ -471,7 +471,7 @@
                             dataArray.push(diff);
                         }
                     }
-                    console.log(series);
+                    // console.log(series);
                     let PNAxisOption = {
                         title:{
                             text: timeField2 + '-' + timeField1
@@ -535,7 +535,7 @@
                     [timeField1, timeField2] = this.getTimeFieldInGroup(groupData);
                     this.getTempSubjectMapInGroup(allSubjectMap, groupData).then((tempSubjectMap) => {
                         this.subjectMap = tempSubjectMap;
-                        console.log(this.subjectMap);
+                        // console.log(this.subjectMap);
                         if(this.subjectMap.size !== 0){
                             this.createEchartOption(this.chartOption, this.subjectMap, timeField1, timeField2);
                         }
@@ -545,10 +545,10 @@
             },
             getChartOption: function (option) {
 
-                console.log(this.subjectMap.size);
+                // console.log(this.subjectMap.size);
                 this.chartOption = option;
                 if(this.subjectMap.size !== 0){
-                    console.log(this.echartOption);
+                    // console.log(this.echartOption);
                     let timeField1 = null, timeField2 = null;
                     if (this.sheetData.type === 'table') {
                         let map = this.globalData.sheetsData[this.sheetData.group],
@@ -626,7 +626,7 @@
             },
             getTempSubjectMapInGroup: function (allSubjectMap, groupData) {
                 // console.log(0);
-                console.log(allSubjectMap);
+                // console.log(allSubjectMap);
                 let p = new Promise((fufill, reject) => {
                     setTimeout(() => {
                         let tempSubjectMap = new Map();
@@ -700,7 +700,7 @@
                         sheetTime: value.sheetTime
                     });
                 }
-                console.log(this.sheetArray);
+                // console.log(this.sheetArray);
             }
             try{
                 sheetName = this.sheetArray[0].sheetName
@@ -718,7 +718,7 @@
                 }
             }
             this.subjectArray = subjectArray;
-            console.log(this.subjectArray);
+            // console.log(this.subjectArray);
         }
     }
 </script>

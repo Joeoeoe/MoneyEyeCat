@@ -65,7 +65,7 @@
                         !rABS && (data = new Uint8Array(data));
                         let workbook = XLSL.read(data, {type: rABS ? 'binary' : 'array'});
                         this.getSheetNames(workbook);
-                        console.log(this.paramSheetsArray);
+                        // console.log(this.paramSheetsArray);
                         let sheetsArrayLength = this.paramSheetsArray.length,
                             ALSheetName = '资产负债',//用于匹配
                             PFSheetName = '利润',
@@ -84,7 +84,7 @@
                                 continue;
                             }
                         }
-                        console.log(ALSheetName, PFSheetName, CFSheetName);
+                        // console.log(ALSheetName, PFSheetName, CFSheetName);
                         //获取资产负债表数据集
                         this.parseALSheet(workbook, ALSheetName);
 
@@ -105,7 +105,7 @@
 
             },
             handleDrop: function (event) {
-                console.log(222);
+                // console.log(222);
                 let rABS = false;
                 event.stopPropagation();
                 event.preventDefault();
@@ -165,8 +165,8 @@
                 /**
                  * 表数据已获得，开始解析获得数据集，用初，末位置进行定位
                  **/
-                console.log(recordPosArray1);
-                console.log(recordPosArray2);
+                // console.log(recordPosArray1);
+                // console.log(recordPosArray2);
                 this.PFDataSets = this.getDataSets(recordPosArray1, recordPosArray2, dataTable, columnsLength, rowsLength);
                 
             },
@@ -220,7 +220,7 @@
                         }
                     }
                 }
-                console.log(dataSets);
+                // console.log(dataSets);
                 return dataSets;
             },
             getSheetSize: function (dataSheet) {//返回对象，包含列数和行数
@@ -324,7 +324,7 @@
                         }
                     }
                 }
-                console.log(dataSets);
+                // console.log(dataSets);
                 this.ALDataSets = dataSets;
             },
         }

@@ -118,8 +118,8 @@
             },
             changeTable: function (newTableTitle, group) {
                 let reg = /Group/;
-                console.log(newTableTitle);
-                console.log(group);
+                // console.log(newTableTitle);
+                // console.log(group);
                 if (reg.test(group) === true) {//点击组
                     let paramData = {
                         title: newTableTitle,
@@ -170,7 +170,7 @@
                     charts: []
                 });
 
-                console.log(globalData);
+                // console.log(globalData);
 
                 //    数据获得，通过paraSheetsArray传给sidebar组件
                 this.dataToParaSheetsArray(ALSheet, 'ALArray', this.paramSheetsArray);
@@ -181,7 +181,7 @@
                 this.isShowCreateChart = !this.isShowCreateChart;
             },
             dataToParaSheetsArray: function (dataSheet, groupName, paraArray) {
-                console.log(paraArray[groupName]);
+                // console.log(paraArray[groupName]);
                 paraArray[groupName].push({
                     title: dataSheet.name,
                     selected: false,

@@ -174,7 +174,7 @@
 
             analysisFiles: function (event, type) { //type:upload表示上传，drop表示拖拽
                 let rABS = false;//true:readAsBinaryString;  false:readAsArrayBuffer
-                console.log(event.target.files);
+                // console.log(event.target.files);
                 let files = null, f = null;
                 if (type === 'upload') {
                     files = event.target.files;
@@ -254,7 +254,7 @@
 
                                 }
                             }
-                            console.log(letterMap);
+                            // console.log(letterMap);
 
                             for (let letter of letterArray) {
                                 let indexObj = letterMap.get(letter);
@@ -336,8 +336,8 @@
                             //     }
                             //
                             // }
-                            console.log(timeField1);
-                            console.log(timeField2);
+                            // console.log(timeField1);
+                            // console.log(timeField2);
                             return [timeField1, timeField2];
                         }
                     };
@@ -377,7 +377,7 @@
                  * 表数据已获得，开始解析获得数据集，用初，末位置进行定位
                  **/
                 this.ALDataSets = this.getDataSets(recordPosArray1, recordPosArray2, dataTable, columnsLength, rowsLength);
-                console.log(this.ALDataSets);
+                // console.log(this.ALDataSets);
             },
             parsePFSheet: function (workbook, sheetName, timeField1, timeField2) {
                 let PFData = workbook.Sheets[sheetName];
@@ -391,7 +391,7 @@
                 this.PFDataTable = dataTable;
                 this.recordPFPosArray1 = recordPosArray1;
                 this.recordPFPosArray2 = recordPosArray2;
-                console.log(dataTable);
+                // console.log(dataTable);
 
                 /**
                  * 表数据已获得，开始解析获得数据集，用初，末位置进行定位

@@ -65,7 +65,7 @@
                             password: this.inputPassword
                         }).then( (response) =>{
                             this.isLoading = false; //结束登录
-                            console.log(response);
+                            // console.log(response);
                         }).catch((error) =>{
 
                         })

@@ -26,7 +26,7 @@
         },
         data: function () {
             return {
-                menuBtnToggle: false,
+                menuBtnToggle: true,
                 choicesArray: this.paramChoicesArray,
                 selectedMap:new Map()
 
@@ -66,8 +66,8 @@
             }
         },
         mounted:function(){
-            console.log(111);
-            console.log(this.paramChoicesArray);
+
+            // console.log(this.paramChoicesArray);
         }
     }
 </script>
